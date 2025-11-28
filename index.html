@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 브라우저 캐시 방지 메타 태그 (강력함) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- [확인용] 제목에 (최종) 표시를 추가했습니다. 실제 사이트 제목이 이렇게 바뀌는지 확인해보세요! -->
+    <title>Green Action 챌린지 (최종)</title>
+    
+    <!-- Tailwind CSS CDN --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN (현황판 그래프용) --><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Inter 폰트 적용 (Tailwind 기본) */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* 페이지 전환 시 부드러운 효과 */
+        .page {
+            display: none; /* 기본적으로 모든 페이지 숨김 */
+            animation: fadeIn 0.5s;
+        }
+        .page.active {
+            display: block; /* 활성화된 페이지만 표시 */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* 갤러리 카드 이미지 비율 유지 */
+        .gallery-card img {
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+        /* [수정!] 상품 이미지 비율 유지 */
+        /* 이 스타일은 Tailwind 클래스로 대체됩니다. */
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- 1. 헤더 및 네비게이션 --><header class="bg-white shadow-md sticky top-0 z-10">
+        <nav class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+            <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-emerald-600">🌍 Green Action 챌린지</h1>
+            <div class="flex gap-2">
+                <button data-page="home" class="nav-btn px-2 py-2 sm:px-3 rounded-md text-sm md:text-base font-medium text-white bg-emerald-500 ring-2 ring-emerald-600 shadow-sm">홈</button>
+                <button data-page="gallery" class="nav-btn px-2 py-2 sm:px-3 rounded-md text-sm md:text-base font-medium text-emerald-700 bg-white hover:bg-gray-100">갤러리</button>
+                <button data-page="dashboard" class="nav-btn px-2 py-2 sm:px-3 rounded-md text-sm md:text-base font-medium text-emerald-700 bg-white hover:bg-gray-100">현황판</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 2. 메인 컨텐츠 영역 --><main class="container mx-auto p-4 md:p-6">
+
+        <!-- 페이지 1: 홈 (캠페인 소개) --><section id="home-page" class="page active">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">"신천초 Green Action 챌린지"에 참여하세요!</h2>
+                <p class="text-gray-600 mb-4">
+                    지구를 지키는 작은 실천! 우리 모두 함께해요.
+                    다양한 미션에 참여하고 인증샷을 올리면 멋진 '제로 웨이스트' 선물을 드립니다!
+                </p>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-emerald-700 mb-3">🌿 4가지 미션</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <li class="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                            <strong class="font-bold text-emerald-800">미션 1: 줍깅/플로깅 (밖에서)</strong>
+                            <p class="text-sm text-gray-600">가족, 친구와 동네를 산책하며 쓰레기를 주워요.</p>
+                        </li>
+                        <li class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                            <strong class="font-bold text-teal-800">미션 2: 잔반 제로 (집에서)</strong>
+                            <p class="text-sm text-gray-600">음식을 남기지 않고 다 먹은 빈 그릇을 인증해요.</p>
+                        </li>
+                        <li class="bg-lime-50 p-4 rounded-lg border border-lime-200">
+                            <strong class="font-bold text-lime-800">미션 3: 분리수거 마스터 (집에서)</strong>
+                            <p class="text-sm text-gray-600">라벨을 뗀 페트병, 깨끗이 씻은 캔/플라스틱을 분리수거해요.</p>
+                        </li>
+                        <li class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <strong class="font-bold text-yellow-800">미션 4: 업사이클링 (창의 활동)</strong>
+                            <p class="text-sm text-gray-600">버려지는 물건으로 나만의 멋진 작품을 만들어요.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-emerald-700 mb-3">🎁 참여 상품</h3>
+                    <p class="text-gray-600 mb-4">
+                        제로웨이스트 키트 (참여 인원 모두 증정!)
+                    </p>
+                    
+                    <!-- [수정!] 상품 사진을 하나로 줄이고 가운데 정렬 -->
+                    <div class="flex justify-center mb-6">
+                        <!-- [수정완료!] 새로운 파일 ID (1_ibb2tH...)가 적용된 썸네일 주소입니다! -->
+                        <img src="https://drive.google.com/thumbnail?id=1_ibb2tH7-Gwb2GtRcmsmKSPXULjYSTFl" alt="친환경 설거지 키트" class="w-3/4 sm:w-1/2 rounded-lg shadow object-contain product-image">
+                    </div>
+                </div>
+
+                <!-- [수정!] '인증샷 올리기' 버튼 텍스트 줄바꿈을 <br> 태그로 명확히 지정 --><a href="https://forms.gle/Sx47vjpcJqQQZ9yM6" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg py-3 px-6 rounded-lg shadow-md transition duration-300 whitespace-normal leading-tight">
+                    지금 바로 챌린지 참여하기!<br>(인증샷 올리기)
+                </a>
+            </div>
+        </section>
+
+        <!-- 페이지 2: 인증샷 갤러리 (사용자 요청) --><section id="gallery-page" class="page">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">우리의 그린 액션 갤러리</h2>
+            <p class="text-gray-600 mb-4">친구들의 멋진 환경 보호 활동을 구경해 보세요!</p>
+            
+            <!-- 로딩 스피너 --><div id="gallery-loading" class="text-center py-10">
+                <p class="text-lg text-gray-600">갤러리를 불러오는 중입니다...</p>
+            </div>
+
+            <div id="gallery-grid-container">
+                <!-- 
+                    자바스크립트(loadGallery 함수)에 의해
+                    이곳에 갤러리 카드가 학년별로 채워집니다.
+                --></div>
+        </section>
+
+        <!-- 페이지 3: 실시간 참여 현황판 --><section id="dashboard-page" class="page">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">실시간 참여 현황판</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 총 참여 현황 --><div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <h3 class="text-lg font-semibold text-gray-500 mb-2">총 참여 인원</h3>
+                    <p class="text-5xl font-bold text-emerald-600">
+                        <span id="total-participants">...</span>명
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        (전교생 162명 중 / 목표 140명)
+                    </p>
+                </div>
+
+                <!-- 학년별 참여 현황 (텍스트) --><div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">학년별 참여 현황</h3>
+                    <ul id="grade-stats-list" class="space-y-3">
+                        <li class="flex justify-between items-center"><span class="text-gray-600">1학년 (총 25명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                        <li class="flex justify-between items-center"><span class="text-gray-600">2학년 (총 20명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                        <li class="flex justify-between items-center"><span class="text-gray-600">3학년 (총 40명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                        <li class="flex justify-between items-center"><span class="text-gray-600">4학년 (총 28명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                        <li class="flex justify-between items-center"><span class="text-gray-600">5학년 (총 20명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                        <li class="flex justify-between items-center"><span class="text-gray-600">6학년 (총 38명)</span> <span class="font-bold text-lg text-emerald-600">...명</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 학년별 참여율 그래프 --><div class="bg-white p-6 rounded-lg shadow-lg mt-6">
+                <h3 class="text-xl font-bold text-gray-700 mb-4">학년별 참여율 (막대 그래프)</h3>
+                <div class="relative h-64 md:h-80">
+                    <canvas id="grade-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- [추가] 버전 확인용 푸터 (나중에 삭제 가능) -->
+    <footer class="text-center py-4 text-gray-400 text-xs">
+        v.Final - 사진 1개 적용 완료
+    </footer>
+
+    <script>
+        // --- [설정] ---
+        
+        // 1. [필수] Google Apps Script(GAS) 웹 앱 URL
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxupn6GwJCShZpRTAKHUhmD2NfYtPzMHJRqE_eBzRpkyfmiCKUZtalMzNFgwwGcX_QWDg/exec";
+        
+        
+        // 학년별 총 학생 수 (기획안 기준)
+        const gradeTotals = {
+            "1": 25,
+            "2": 20,
+            "3": 40,
+            "4": 28,
+            "5": 20,
+            "6": 38
+        };
+
+        // --- 데이터 처리 및 렌더링 ---
+        
+        // 데이터를 한 번만 가져오기 위한 캐시
+        let allEntriesCache = null;
+
+        // 1. 데이터 가져오기 (실제로는 GAS_URL 사용)
+        async function fetchData() {
+            try {
+                 if (!GAS_URL || GAS_URL.includes("여기에_붙여넣으세요")) {
+                    alert("HTML 파일의 GAS_URL 변수에 Apps Script 웹 앱 URL을 정확히 입력해주세요.");
+                    return []; // 빈 배열 반환
+                 }
+                // [수정!] 캐시 방지를 위해 URL에 현재 시간을 쿼리 파라미터로 추가
+                const response = await fetch(GAS_URL + "?v=" + new Date().getTime());
+                if (!response.ok) {
+                    // [추가!] 404 오류 시 더 구체적인 안내 제공
+                    if (response.status === 404) {
+                         alert(`[오류 404] GAS_URL을 찾을 수 없습니다.\n\n"${GAS_URL}"\n\n[해결책]\n1. Google Apps Script에서 '배포 관리'로 이동하세요.\n2. '활성' 배포의 '웹 앱 URL'을 다시 복사하세요.\n3. HTML 파일의 GAS_URL 변수에 '정확히' 붙여넣으세요.`);
+                         throw new Error(`HTTP error! status: ${response.status} (Not Found)`);
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error("GAS 스크립트에서 오류가 발생했습니다:", data.error);
+                    alert(`[오류] Google Apps Script에서 오류가 발생했습니다:\n\n"${data.error}"\n\n[해결책]\n1. Google 스프레드시트의 '탭 이름'을 확인하세요.\n2. Apps Script(Code.gs) 파일의 'SHEET_NAME' 설정을 실제 탭 이름과 '똑같이' 수정하세요.\n3. 수정한 뒤 '새 버전'으로 다시 배포하세요.`);
+                    throw new Error(data.error);
+                }
+
+                if (!data.entries) {
+                    console.error("GAS에서 반환된 데이터 형식이 다릅니다. (data.entries가 없음)", data);
+                    throw new Error("GAS 데이터 형식이 올바르지 않습니다. (data.entries 없음)");
+                }
+                return data.entries;
+            } catch (error) {
+                console.error("fetchData 오류:", error);
+                if (error.message.includes("시트를 찾을 수 없습니다") || error.message.includes("404")) {
+                    // 위에서 이미 구체적인 alert을 띄웠으므로, 여기서는 추가 alert을 막습니다.
+                } else {
+                    alert(`데이터 로딩 중 오류가 발생했습니다.\n\D${error.message}\n\nF12를 눌러 콘솔을 확인해보세요.`);
+                }
+                return []; 
+            }
+        }
+
+        // 2. 갤러리 페이지 렌더링
+        async function loadGallery() {
+            const container = document.getElementById('gallery-grid-container');
+            const loading = document.getElementById('gallery-loading');
+            
+            container.innerHTML = ''; // 기존 갤러리 비우기
+            loading.style.display = 'block'; // 로딩 표시
+
+            allEntriesCache = null; 
+            const entries = await fetchDataWithCache(); 
+
+            // 최신순으로 정렬 (타임스탬프 기준 내림차순)
+            const sortedEntries = entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            loading.style.display = 'none'; // 로딩 숨기기
+
+            if (sortedEntries.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 col-span-full text-center">아직 제출된 인증샷이 없습니다. 첫 번째로 참여해보세요!</p>';
+                return;
+            }
+
+            // 1학년부터 6학년까지 순회
+            for (let grade = 1; grade <= 6; grade++) {
+                // 현재 학년에 해당하는 데이터 필터링
+                const gradeEntries = sortedEntries.filter(entry => String(entry.grade) === String(grade));
+
+                // 학년별 섹션 생성
+                const gradeSection = document.createElement('div');
+                gradeSection.className = 'mb-12'; // 섹션 간 마진
+                
+                // 학년별 제목 (참여 인원 수 표시)
+                const title = document.createElement('h2');
+                title.className = "text-2xl font-bold text-gray-800 mb-4 mt-8 border-b-2 border-emerald-500 pb-2";
+                title.textContent = `${grade}학년 (${gradeEntries.length}명)`;
+                gradeSection.appendChild(title);
+
+                // 학년별 그리드 생성
+                const grid = document.createElement('div');
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4";
+
+                if (gradeEntries.length === 0) {
+                    // 해당 학년 참여자가 없으면 메시지 표시
+                    grid.innerHTML = '<p class="text-gray-500 col-span-full">아직 참여한 학생이 없습니다.</p>';
+                } else {
+                    // 참여자가 있으면 갤러리 카드 생성
+                    gradeEntries.forEach(entry => {
+                        const imageUrl = entry.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=?';
+                        const anonymizedName = anonymizeName(entry.name);
+                        const mission = entry.mission || '미션 미지정';
+                        const comment = entry.comment || '소감이 없습니다.';
+                        const studentClass = entry.class || '?';
+
+                        const card = document.createElement('div');
+                        card.className = 'gallery-card bg-white rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105';
+                        card.innerHTML = `
+                            <img src="${imageUrl}" alt="${mission} 인증샷" class="w-full h-48 object-cover" onerror="this.src='https://placehold.co/400x300/e2e8f0/94a3b8?text=Load%20Error'; this.onerror=null;">
+                            <div class="p-4">
+                                <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2">${mission}</span>
+                                <h3 class="font-bold text-gray-800">${grade}학년 ${studentClass}반 ${anonymizedName}</h3>
+                                <p class="text-sm text-gray-600 mt-1 break-words" title="${comment}">"${comment}"</p>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
+                
+                gradeSection.appendChild(grid); // 학년 섹션에 그리드 추가
+                container.appendChild(gradeSection); // 전체 컨테이너에 학년 섹션 추가
+            }
+        }
+
+        // 3. 현황판 페이지 렌더링
+        async function loadDashboard(chartInstance) {
+            const listElement = document.getElementById('grade-stats-list');
+            const totalElement = document.getElementById('total-participants');
+            
+            listElement.innerHTML = '<li class="text-gray-600 text-center">데이터 로딩 중...</li>'; // 로딩 표시
+            totalElement.textContent = '...';
+            
+            allEntriesCache = null; 
+            const data = await fetchDataWithCache(); 
+
+            // --- 현황 계산 ---
+            const uniqueParticipants = new Set();
+            data.forEach(entry => {
+                const identifier = `${entry.grade}-${entry.class}-${entry.name}`;
+                if (entry.grade && entry.class && entry.name) { 
+                    uniqueParticipants.add(identifier);
+                }
+            });
+            const totalCount = uniqueParticipants.size;
+            totalElement.textContent = totalCount;
+
+            const gradeCounts = {};
+            uniqueParticipants.forEach(identifier => {
+                const grade = identifier.split('-')[0]; // '1', '2', ...
+                if (grade) {
+                    gradeCounts[grade] = (gradeCounts[grade] || 0) + 1;
+                }
+            });
+
+            // --- UI 업데이트 ---
+            listElement.innerHTML = ''; // 리스트 비우기
+            const chartLabels = [];
+            const chartData = [];
+
+            for (const grade in gradeTotals) {
+                const total = gradeTotals[grade]; // 학년 총원
+                const count = gradeCounts[grade] || 0; // 학년 참여 인원
+                const percentage = total > 0 ? (count / total * 100).toFixed(1) : 0;
+
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center py-1';
+                li.innerHTML = `
+                    <span class="text-gray-600">${grade}학년 (총 ${total}명)</span>
+                    <div class="flex items-center">
+                        <span class="font-bold text-lg text-emerald-600 mr-2">${count}명</span>
+                        <span class="text-sm text-gray-500">(${percentage}%)</span>
+                    </div>
+                `;
+                listElement.appendChild(li);
+
+                chartLabels.push(`${grade}학년`);
+                chartData.push(percentage); // 참여율
+            }
+
+            // 2. 막대 그래프 그리기
+            const ctx = document.getElementById('grade-chart').getContext('2d');
+            
+            if (chartInstance.current) {
+                chartInstance.current.destroy();
+            }
+
+            chartInstance.current = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: '학년별 참여율 (%)',
+                        data: chartData,
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.6)', // 1학년
+                            'rgba(13, 148, 136, 0.6)', // 2학년
+                            'rgba(5, 150, 105, 0.6)',  // 3학년
+                            'rgba(110, 231, 183, 0.6)',// 4학년
+                            'rgba(107, 114, 128, 0.6)',// 5학년
+                            'rgba(52, 211, 153, 0.6)'  // 6학년
+                        ],
+                        borderColor: [
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(13, 148, 136, 1)',
+                            'rgba(5, 150, 105, 1)',
+                            'rgba(110, 231, 183, 1)',
+                            'rgba(107, 114, 128, 1)',
+                            'rgba(52, 211, 153, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100, // 최대값을 100으로 고정
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%' // y축에 % 표시
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // 범례 숨기기
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. 이름 익명화 (예: 김OO)
+        function anonymizeName(name) {
+            if (!name || name.length < 2) return 'O...O';
+            
+            if (name.length === 2) {
+                return `${name[0]}O`; // 2글자 (예: 홍길) -> 홍O
+            } else {
+                const middle = 'O'.repeat(name.length - 2);
+                return `${name[0]}${middle}${name[name.length - 1]}`; // 3글자 이상 (예: 홍길동) -> 홍O동
+            }
+        }
+
+        // 5. 캐시로 데이터 가져오기 (중복 호출 방지)
+        async function fetchDataWithCache() {
+            if (allEntriesCache) {
+                return allEntriesCache; // (이전 캐시가 남아있을 경우)
+            }
+            const data = await fetchData(); // 캐시가 없으면 GAS에서 가져오기
+            allEntriesCache = data; // 캐시에 저장
+            return data;
+        }
+
+        // 6. 페이지 전환 및 네비게이션
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const pages = document.querySelectorAll('.page');
+            const chartInstance = { current: null }; // 차트 인스턴스 저장
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pageId = button.dataset.page;
+
+                    // 1. 버튼 활성화 스타일 변경
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('bg-emerald-500', 'text-white', 'ring-2', 'ring-emerald-600', 'shadow-sm');
+                        btn.classList.add('text-emerald-700', 'bg-white', 'hover:bg-gray-100');
+                    });
+                    button.classList.add('bg-emerald-500', 'text-white', 'ring-2', 'ring-emerald-600', 'shadow-sm');
+                    button.classList.remove('text-emerald-700', 'bg-white', 'hover:bg-gray-100');
+
+                    // 2. 페이지 전환
+                    pages.forEach(page => {
+                        if (page.id === `${pageId}-page`) {
+                            page.classList.add('active');
+                        } else {
+                            page.classList.remove('active');
+                        }
+                    });
+                    
+                    // 3. 페이지에 맞는 데이터 로드
+                    if (pageId === 'gallery') {
+                        loadGallery();
+                    } else if (pageId === 'dashboard') {
+                        if (chartInstance.current) {
+                            chartInstance.current.destroy();
+                            chartInstance.current = null;
+                        }
+                        loadDashboard(chartInstance); // 차트 인스D스 객체를 전달
+                    }
+                });
+            });
+
+            // 초기 페이지 로드 (홈)
+            document.getElementById('home-page').classList.add('active');
+        });
+
+    </script>
+</body>
+</html>
